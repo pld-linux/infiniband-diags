@@ -1,12 +1,12 @@
 Summary:	InfiniBand diagnostic tools
 Summary(pl.UTF-8):	Narzędzia diagnostyczne InfiniBand
 Name:		infiniband-diags
-Version:	1.5.7
+Version:	1.5.8
 Release:	1
 License:	BSD or GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.openfabrics.org/downloads/management/%{name}-%{version}.tar.gz
-# Source0-md5:	2e6c404427dda6512c3bb40c1a67d4f4
+# Source0-md5:	c0b24a1053ae8b0b3caf5950b3ede6dc
 URL:		http://www.openfabrics.org/
 BuildRequires:	libibmad-devel
 BuildRequires:	libibumad-devel
