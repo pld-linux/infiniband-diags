@@ -1,12 +1,12 @@
 Summary:	InfiniBand diagnostic tools
 Summary(pl.UTF-8):	Narzędzia diagnostyczne InfiniBand
 Name:		infiniband-diags
-Version:	1.5.8
+Version:	1.5.9
 Release:	1
 License:	BSD or GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.openfabrics.org/downloads/management/%{name}-%{version}.tar.gz
-# Source0-md5:	c0b24a1053ae8b0b3caf5950b3ede6dc
+# Source0-md5:	807680f1e026ad8cacb2ec08ac8d86a6
 URL:		http://www.openfabrics.org/
 BuildRequires:	libibmad-devel
 BuildRequires:	libibumad-devel
@@ -70,6 +70,7 @@ Statyczna biblioteka libibnetdisc.
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/infiniband-diags
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -119,6 +120,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/smpdump
 %attr(755,root,root) %{_sbindir}/smpquery
 %attr(755,root,root) %{_sbindir}/vendstat
+%dir %{_sysconfdir}/infiniband-diags
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/infiniband-diags/error_thresholds
 %{perl_vendorlib}/IBswcountlimits.pm
 %{_mandir}/man8/check_lft_balance.8*
 %{_mandir}/man8/dump_lfts.8*
@@ -147,6 +150,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/ibswportwatch.8*
 %{_mandir}/man8/ibsysstat.8*
 %{_mandir}/man8/ibtracert.8*
+%{_mandir}/man8/infiniband-diags.8*
 %{_mandir}/man8/perfquery.8*
 %{_mandir}/man8/saquery.8*
 %{_mandir}/man8/sminfo.8*
@@ -164,6 +168,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libibnetdisc.so
 %{_libdir}/libibnetdisc.la
 %{_includedir}/infiniband/ibnetdisc.h
+%{_includedir}/infiniband/ibnetdisc_osd.h
 %{_mandir}/man3/ibnd_*.3*
 
 %files static
