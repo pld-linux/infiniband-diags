@@ -1,12 +1,12 @@
 Summary:	InfiniBand diagnostic tools
 Summary(pl.UTF-8):	Narzędzia diagnostyczne InfiniBand
 Name:		infiniband-diags
-Version:	1.5.12
+Version:	1.5.13
 Release:	1
 License:	BSD or GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.openfabrics.org/downloads/management/%{name}-%{version}.tar.gz
-# Source0-md5:	7a823a3f6d9cfa3d19e1ca6889f3c122
+# Source0-md5:	367affa587f346f9ddc064bcce4206cf
 URL:		http://www.openfabrics.org/
 BuildRequires:	libibmad-devel
 BuildRequires:	libibumad-devel
@@ -122,6 +122,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/vendstat
 %dir %{_sysconfdir}/infiniband-diags
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/infiniband-diags/error_thresholds
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/infiniband-diags/ibdiag.conf
 %{perl_vendorlib}/IBswcountlimits.pm
 %{_mandir}/man8/check_lft_balance.8*
 %{_mandir}/man8/dump_lfts.8*
