@@ -1,12 +1,12 @@
 Summary:	InfiniBand diagnostic tools
 Summary(pl.UTF-8):	Narzędzia diagnostyczne InfiniBand
 Name:		infiniband-diags
-Version:	1.5.13
+Version:	1.6.0
 Release:	1
 License:	BSD or GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.openfabrics.org/downloads/management/%{name}-%{version}.tar.gz
-# Source0-md5:	367affa587f346f9ddc064bcce4206cf
+# Source0-md5:	60c0e5365f1394ccc88d4f22ae2de09a
 URL:		http://www.openfabrics.org/
 BuildRequires:	libibmad-devel
 BuildRequires:	libibumad-devel
@@ -89,33 +89,26 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/dump_mfts.sh
 %attr(755,root,root) %{_sbindir}/ibaddr
 %attr(755,root,root) %{_sbindir}/ibcacheedit
-%attr(755,root,root) %{_sbindir}/ibcheck*
-%attr(755,root,root) %{_sbindir}/ibclear*
-%attr(755,root,root) %{_sbindir}/ibdata*
-%attr(755,root,root) %{_sbindir}/ibdiscover.pl
+%attr(755,root,root) %{_sbindir}/ibccconfig
+%attr(755,root,root) %{_sbindir}/ibccquery
 %attr(755,root,root) %{_sbindir}/ibfindnodesusing.pl
 %attr(755,root,root) %{_sbindir}/ibhosts
 %attr(755,root,root) %{_sbindir}/ibidsverify.pl
 %attr(755,root,root) %{_sbindir}/iblinkinfo
-%attr(755,root,root) %{_sbindir}/iblinkinfo.pl
 %attr(755,root,root) %{_sbindir}/ibnetdiscover
 %attr(755,root,root) %{_sbindir}/ibnodes
 %attr(755,root,root) %{_sbindir}/ibping
 %attr(755,root,root) %{_sbindir}/ibportstate
-%attr(755,root,root) %{_sbindir}/ibprint*.pl
 %attr(755,root,root) %{_sbindir}/ibqueryerrors
-%attr(755,root,root) %{_sbindir}/ibqueryerrors.pl
 %attr(755,root,root) %{_sbindir}/ibroute
 %attr(755,root,root) %{_sbindir}/ibrouters
 %attr(755,root,root) %{_sbindir}/ibstat
 %attr(755,root,root) %{_sbindir}/ibstatus
 %attr(755,root,root) %{_sbindir}/ibswitches
-%attr(755,root,root) %{_sbindir}/ibswportwatch.pl
 %attr(755,root,root) %{_sbindir}/ibsysstat
 %attr(755,root,root) %{_sbindir}/ibtracert
 %attr(755,root,root) %{_sbindir}/perfquery
 %attr(755,root,root) %{_sbindir}/saquery
-%attr(755,root,root) %{_sbindir}/set_nodedesc.sh
 %attr(755,root,root) %{_sbindir}/sminfo
 %attr(755,root,root) %{_sbindir}/smpdump
 %attr(755,root,root) %{_sbindir}/smpquery
@@ -129,10 +122,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/dump_mfts.8*
 %{_mandir}/man8/ibaddr.8*
 %{_mandir}/man8/ibcacheedit.8*
-%{_mandir}/man8/ibcheck*.8*
-%{_mandir}/man8/ibclear*.8*
-%{_mandir}/man8/ibdata*.8*
-%{_mandir}/man8/ibdiscover.8*
+%{_mandir}/man8/ibccconfig.8*
+%{_mandir}/man8/ibccquery.8*
 %{_mandir}/man8/ibfindnodesusing.8*
 %{_mandir}/man8/ibhosts.8*
 %{_mandir}/man8/ibidsverify.8*
@@ -141,14 +132,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/ibnodes.8*
 %{_mandir}/man8/ibping.8*
 %{_mandir}/man8/ibportstate.8*
-%{_mandir}/man8/ibprint*.8*
 %{_mandir}/man8/ibqueryerrors.8*
 %{_mandir}/man8/ibroute.8*
 %{_mandir}/man8/ibrouters.8*
 %{_mandir}/man8/ibstat.8*
 %{_mandir}/man8/ibstatus.8*
 %{_mandir}/man8/ibswitches.8*
-%{_mandir}/man8/ibswportwatch.8*
 %{_mandir}/man8/ibsysstat.8*
 %{_mandir}/man8/ibtracert.8*
 %{_mandir}/man8/infiniband-diags.8*
