@@ -8,7 +8,7 @@ Group:		Networking/Utilities
 Source0:	http://www.openfabrics.org/downloads/management/%{name}-%{version}.tar.gz
 # Source0-md5:	d250e63f849b017f7149046c003cc8f6
 URL:		http://www.openfabrics.org/
-BuildRequires:	libibmad-devel
+BuildRequires:	libibmad-devel >= 1.3.9
 BuildRequires:	libibumad-devel
 BuildRequires:	opensm-devel
 Requires:	%{name}-libs = %{version}-%{release}
@@ -26,6 +26,7 @@ potrzebne do diagnostyki podsieci IB.
 Summary:	InfiniBand diagnostic library
 Summary(pl.UTF-8):	Biblioteka diagnostyczna InfiniBand
 Group:		Libraries
+Requires:	libibmad >= 1.3.9
 
 %description libs
 InfiniBand diagnostic library.
@@ -38,7 +39,7 @@ Summary:	Header files for libibnetdisc library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libibnetdisc
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	libibmad-devel
+Requires:	libibmad-devel >= 1.3.9
 Requires:	libibumad-devel
 Requires:	opensm-devel
 
