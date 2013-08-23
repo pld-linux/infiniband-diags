@@ -1,16 +1,18 @@
 Summary:	InfiniBand diagnostic tools
 Summary(pl.UTF-8):	Narzędzia diagnostyczne InfiniBand
 Name:		infiniband-diags
-Version:	1.6.1
+Version:	1.6.2
 Release:	1
 License:	BSD or GPL v2
 Group:		Networking/Utilities
 Source0:	http://www.openfabrics.org/downloads/management/%{name}-%{version}.tar.gz
-# Source0-md5:	d250e63f849b017f7149046c003cc8f6
+# Source0-md5:	0df49878f90c52ab7a997ca55e57ef51
 URL:		http://www.openfabrics.org/
+BuildRequires:	glib2-devel >= 2.0
 BuildRequires:	libibmad-devel >= 1.3.9
 BuildRequires:	libibumad-devel
 BuildRequires:	opensm-devel
+BuildRequires:	pkgconfig
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -39,6 +41,7 @@ Summary:	Header files for libibnetdisc library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libibnetdisc
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	glib2-devel >= 2.0
 Requires:	libibmad-devel >= 1.3.9
 Requires:	libibumad-devel
 Requires:	opensm-devel
@@ -86,6 +89,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc COPYING ChangeLog README
 %attr(755,root,root) %{_sbindir}/check_lft_balance.pl
+%attr(755,root,root) %{_sbindir}/dump_fts
 %attr(755,root,root) %{_sbindir}/dump_lfts.sh
 %attr(755,root,root) %{_sbindir}/dump_mfts.sh
 %attr(755,root,root) %{_sbindir}/ibaddr
@@ -119,6 +123,7 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/infiniband-diags/ibdiag.conf
 %{perl_vendorlib}/IBswcountlimits.pm
 %{_mandir}/man8/check_lft_balance.8*
+%{_mandir}/man8/dump_fts.8*
 %{_mandir}/man8/dump_lfts.8*
 %{_mandir}/man8/dump_mfts.8*
 %{_mandir}/man8/ibaddr.8*
