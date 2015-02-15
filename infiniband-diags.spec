@@ -1,18 +1,21 @@
+# TODO: PLDify rdma-ndd init script
 Summary:	InfiniBand diagnostic tools
 Summary(pl.UTF-8):	Narzędzia diagnostyczne InfiniBand
 Name:		infiniband-diags
-Version:	1.6.4
+Version:	1.6.5
 Release:	1
 License:	BSD or GPL v2
 Group:		Networking/Utilities
-Source0:	http://www.openfabrics.org/downloads/management/%{name}-%{version}.tar.gz
-# Source0-md5:	01fe2c5f60c2bd2975018bc572190fe4
-URL:		http://www.openfabrics.org/
+Source0:	https://www.openfabrics.org/downloads/management/%{name}-%{version}.tar.gz
+# Source0-md5:	2a587bda5fc8287643c83363e4b6ec21
+Patch0:		%{name}-format.patch
+URL:		https://www.openfabrics.org/
 BuildRequires:	glib2-devel >= 2.0
 BuildRequires:	libibmad-devel >= 1.3.9
 BuildRequires:	libibumad-devel
 BuildRequires:	opensm-devel
 BuildRequires:	pkgconfig
+BuildRequires:	udev-devel
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -66,6 +69,7 @@ Statyczna biblioteka libibnetdisc.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %configure \
@@ -78,6 +82,9 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/infiniband-diags
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+install -d $RPM_BUILD_ROOT/etc/rc.d
+%{__mv} $RPM_BUILD_ROOT/etc/init.d $RPM_BUILD_ROOT/etc/rc.d
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -113,6 +120,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/ibsysstat
 %attr(755,root,root) %{_sbindir}/ibtracert
 %attr(755,root,root) %{_sbindir}/perfquery
+%attr(755,root,root) %{_sbindir}/rdma-ndd
 %attr(755,root,root) %{_sbindir}/saquery
 %attr(755,root,root) %{_sbindir}/sminfo
 %attr(755,root,root) %{_sbindir}/smpdump
@@ -121,6 +129,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_sysconfdir}/infiniband-diags
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/infiniband-diags/error_thresholds
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/infiniband-diags/ibdiag.conf
+%attr(754,root,root) /etc/rc.d/init.d/rdma-ndd
 %{perl_vendorlib}/IBswcountlimits.pm
 %{_mandir}/man8/check_lft_balance.8*
 %{_mandir}/man8/dump_fts.8*
@@ -148,6 +157,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/ibtracert.8*
 %{_mandir}/man8/infiniband-diags.8*
 %{_mandir}/man8/perfquery.8*
+%{_mandir}/man8/rdma-ndd.8*
 %{_mandir}/man8/saquery.8*
 %{_mandir}/man8/sminfo.8*
 %{_mandir}/man8/smpdump.8*
