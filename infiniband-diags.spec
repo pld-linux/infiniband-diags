@@ -2,19 +2,21 @@
 Summary:	InfiniBand diagnostic tools
 Summary(pl.UTF-8):	Narzędzia diagnostyczne InfiniBand
 Name:		infiniband-diags
-Version:	1.6.6
+Version:	1.6.7
 Release:	1
 License:	BSD or GPL v2
 Group:		Networking/Utilities
 Source0:	https://www.openfabrics.org/downloads/management/%{name}-%{version}.tar.gz
-# Source0-md5:	b855ca3b98afefc2ad6a2de378ab71dd
+# Source0-md5:	e100bb49f4227a70e0831152b2e4d61e
 URL:		https://www.openfabrics.org/
+BuildRequires:	docutils
 BuildRequires:	glib2-devel >= 2.0
 BuildRequires:	libibmad-devel >= 1.3.9
 BuildRequires:	libibumad-devel
 BuildRequires:	opensm-devel
 BuildRequires:	pkgconfig
-BuildRequires:	udev-devel
+BuildRequires:	systemd-devel
+BuildRequires:	udev-devel >= 1:218
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -81,8 +83,7 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/infiniband-diags
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/etc/rc.d
-%{__mv} $RPM_BUILD_ROOT/etc/init.d $RPM_BUILD_ROOT/etc/rc.d
+install -D etc/rdma-ndd.init $RPM_BUILD_ROOT/etc/rc.d/init.d/rdma-ndd
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -128,6 +129,7 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/infiniband-diags/error_thresholds
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/infiniband-diags/ibdiag.conf
 %attr(754,root,root) /etc/rc.d/init.d/rdma-ndd
+%{systemdunitdir}/rdma-ndd.service
 %{perl_vendorlib}/IBswcountlimits.pm
 %{_mandir}/man8/check_lft_balance.8*
 %{_mandir}/man8/dump_fts.8*
