@@ -3,7 +3,7 @@ Summary:	InfiniBand diagnostic tools
 Summary(pl.UTF-8):	Narzędzia diagnostyczne InfiniBand
 Name:		infiniband-diags
 Version:	1.6.7
-Release:	1
+Release:	2
 License:	BSD or GPL v2
 Group:		Networking/Utilities
 Source0:	https://www.openfabrics.org/downloads/management/%{name}-%{version}.tar.gz
