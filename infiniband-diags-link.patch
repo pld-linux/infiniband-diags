@@ -1,0 +1,43 @@
+--- infiniband-diags-2.1.0/configure.ac.orig	2018-08-08 00:57:04.000000000 +0200
++++ infiniband-diags-2.1.0/configure.ac	2018-08-25 21:03:53.564429583 +0200
+@@ -29,7 +29,7 @@
+ AM_CONDITIONAL(HAVE_DASH, test x$have_dash = xtrue)
+ 
+ dnl Checks for libraries
+-AC_CHECK_LIB(ibumad, umad_init, [],
++AC_CHECK_LIB(ibumad, umad_init, [:],
+ 	AC_MSG_ERROR([umad_init() not found. diags require libibumad.]))
+ AC_CHECK_MEMBER([struct umad_port.link_layer],
+ 			[ac_have_umad_port_link_layer=yes],
+@@ -38,7 +38,7 @@
+ if test "$ac_have_umad_port_link_layer" = "yes"; then
+    AC_DEFINE([HAVE_UMAD_PORT_LINK_LAYER], 1, [Define to 1 if struct umad_port has link_layer member])
+ fi
+-AC_CHECK_LIB(osmcomp, cl_qmap_insert, [],
++AC_CHECK_LIB(osmcomp, cl_qmap_insert, [:],
+ 	AC_MSG_ERROR([cl_qmap_insert() not found. diags require libosmcomp.]))
+ 
+ dnl Checks for header files.
+--- infiniband-diags-2.1.0/libibmad/Makefile.am.orig	2017-09-26 23:45:42.000000000 +0200
++++ infiniband-diags-2.1.0/libibmad/Makefile.am	2018-08-25 21:15:36.727754783 +0200
+@@ -25,6 +25,7 @@
+ libibmad_la_LDFLAGS = -version-info $(ibmad_api_version) \
+     -export-dynamic $(libibmad_version_script)
+ libibmad_la_DEPENDENCIES = $(srcdir)/src/libibmad.map
++libibmad_la_LIBADD = -libumad
+ 
+ libibmadincludedir = $(includedir)/infiniband
+ 
+--- infiniband-diags-2.1.0/libibnetdisc/Makefile.am.orig	2017-09-26 23:45:42.000000000 +0200
++++ infiniband-diags-2.1.0/libibnetdisc/Makefile.am	2018-08-25 21:19:15.027752404 +0200
+@@ -28,8 +28,9 @@
+ libibnetdisc_la_CFLAGS = -Wall $(DBGFLAGS) $(GLIB_CFLAGS)
+ libibnetdisc_la_LDFLAGS = -version-info $(ibnetdisc_api_version) \
+ 	-export-dynamic $(libibnetdisc_version_script) \
+-	-L$(top_builddir)/libibmad -libmad $(GLIB_LIBS)
++	$(GLIB_LIBS)
+ libibnetdisc_la_DEPENDENCIES = $(srcdir)/src/libibnetdisc.map
++libibnetdisc_la_LIBADD = $(top_builddir)/libibmad/libibmad.la -libumad -losmcomp
+ 
+ libibnetdiscincludedir = $(includedir)/infiniband
+ 

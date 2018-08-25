@@ -1,18 +1,21 @@
-# TODO: PLDify rdma-ndd init script
 Summary:	InfiniBand diagnostic tools
 Summary(pl.UTF-8):	Narzędzia diagnostyczne InfiniBand
 Name:		infiniband-diags
-Version:	1.6.7
-Release:	2
+Version:	2.1.0
+Release:	1
 License:	BSD or GPL v2
 Group:		Networking/Utilities
-Source0:	https://www.openfabrics.org/downloads/management/%{name}-%{version}.tar.gz
-# Source0-md5:	e100bb49f4227a70e0831152b2e4d61e
+#Source0Download: https://github.com/linux-rdma/infiniband-diags/releases
+Source0:	https://github.com/linux-rdma/infiniband-diags/releases/download/%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	134a1ddf31df7bc05ff81636f4e35779
+Patch0:		%{name}-link.patch
 URL:		https://www.openfabrics.org/
+BuildRequires:	autoconf >= 2.57
+BuildRequires:	automake
 BuildRequires:	docutils
 BuildRequires:	glib2-devel >= 2.0
-BuildRequires:	libibmad-devel >= 1.3.9
 BuildRequires:	libibumad-devel
+BuildRequires:	libtool
 BuildRequires:	opensm-devel
 BuildRequires:	pkgconfig
 BuildRequires:	systemd-devel
@@ -32,7 +35,7 @@ potrzebne do diagnostyki podsieci IB.
 Summary:	InfiniBand diagnostic library
 Summary(pl.UTF-8):	Biblioteka diagnostyczna InfiniBand
 Group:		Libraries
-Requires:	libibmad >= 1.3.9
+Requires:	libibmad = %{version}-%{release}
 
 %description libs
 InfiniBand diagnostic library.
@@ -46,7 +49,7 @@ Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libibnetdisc
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	glib2-devel >= 2.0
-Requires:	libibmad-devel >= 1.3.9
+Requires:	libibmad-devel >= %{version}-%{release}
 Requires:	libibumad-devel
 Requires:	opensm-devel
 
@@ -68,10 +71,56 @@ Static libibnetdisc library.
 %description static -l pl.UTF-8
 Statyczna biblioteka libibnetdisc.
 
+%package -n libibmad
+Summary:	OpenFabrics Alliance InfiniBand MAD library
+Summary(pl.UTF-8):	Biblioteka OpenFabrics Alliance InfiniBand MAD
+Group:		Libraries
+
+%description -n libibmad
+libibmad provides low layer InfiniBand functions for use by the IB
+diagnostic and management programs. These include MAD, SA, SMP, and
+other basic IB functions.
+
+%description -n libibmad -l pl.UTF-8
+libibmad to biblioteka udostępniająca niskopoziomowe funkcje
+InfiniBand przeznaczone dla programów diagnostycznych i zarządzających
+IB. Obejmuje MAD, SA, SMP i inne podstawowe funkcje IB.
+
+%package -n libibmad-devel
+Summary:	Header files for libibmad library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libibmad
+Group:		Development/Libraries
+Requires:	libibmad = %{version}-%{release}
+Requires:	libibumad-devel
+
+%description -n libibmad-devel
+Header files for libibmad library.
+
+%description -n libibmad-devel -l pl.UTF-8
+Pliki nagłówkowe biblioteki libibmad.
+
+%package -n libibmad-static
+Summary:	Static libibmad library
+Summary(pl.UTF-8):	Statyczna biblioteka libibmad
+Group:		Development/Libraries
+Requires:	libibmad-devel = %{version}-%{release}
+
+%description -n libibmad-static
+This package contains the static libibmad library.
+
+%description -n libibmad-static -l pl.UTF-8
+Ten pakiet zawiera statyczną bibliotekę libibmad.
+
 %prep
 %setup -q
+%patch0 -p1
 
 %build
+%{__libtoolize}
+%{__aclocal} -I config
+%{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure \
 	--with-perl-installdir=%{perl_vendorlib}
 %{__make}
@@ -83,17 +132,18 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/infiniband-diags
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install -D etc/rdma-ndd.init $RPM_BUILD_ROOT/etc/rc.d/init.d/rdma-ndd
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
+%post	-n libibmad -p /sbin/ldconfig
+%postun	-n libibmad -p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
-%doc COPYING ChangeLog README
+%doc AUTHORS COPYING ChangeLog README
 %attr(755,root,root) %{_sbindir}/check_lft_balance.pl
 %attr(755,root,root) %{_sbindir}/dump_fts
 %attr(755,root,root) %{_sbindir}/dump_lfts.sh
@@ -119,7 +169,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/ibsysstat
 %attr(755,root,root) %{_sbindir}/ibtracert
 %attr(755,root,root) %{_sbindir}/perfquery
-%attr(755,root,root) %{_sbindir}/rdma-ndd
 %attr(755,root,root) %{_sbindir}/saquery
 %attr(755,root,root) %{_sbindir}/sminfo
 %attr(755,root,root) %{_sbindir}/smpdump
@@ -128,8 +177,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_sysconfdir}/infiniband-diags
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/infiniband-diags/error_thresholds
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/infiniband-diags/ibdiag.conf
-%attr(754,root,root) /etc/rc.d/init.d/rdma-ndd
-%{systemdunitdir}/rdma-ndd.service
 %{perl_vendorlib}/IBswcountlimits.pm
 %{_mandir}/man8/check_lft_balance.8*
 %{_mandir}/man8/dump_fts.8*
@@ -157,7 +204,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/ibtracert.8*
 %{_mandir}/man8/infiniband-diags.8*
 %{_mandir}/man8/perfquery.8*
-%{_mandir}/man8/rdma-ndd.8*
 %{_mandir}/man8/saquery.8*
 %{_mandir}/man8/sminfo.8*
 %{_mandir}/man8/smpdump.8*
@@ -180,3 +226,20 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libibnetdisc.a
+
+%files -n libibmad
+%defattr(644,root,root,755)
+%doc libibmad/{ChangeLog,README}
+%attr(755,root,root) %{_libdir}/libibmad.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libibmad.so.5
+
+%files -n libibmad-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libibmad.so
+%{_libdir}/libibmad.la
+%{_includedir}/infiniband/mad.h
+%{_includedir}/infiniband/mad_osd.h
+
+%files -n libibmad-static
+%defattr(644,root,root,755)
+%{_libdir}/libibmad.a
